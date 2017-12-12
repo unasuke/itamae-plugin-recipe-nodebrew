@@ -2,7 +2,7 @@ require 'serverspec'
 require 'net/ssh'
 require 'tempfile'
 
-VAGRANT_BIN_PATH = '/usr/local/bin/vagrant'
+VAGRANT_BIN_PATH = ENV['CI'] ? 'vagrant' : '/usr/local/bin/vagrant'
 
 set :backend, :ssh
 
