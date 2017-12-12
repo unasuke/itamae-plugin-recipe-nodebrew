@@ -1,0 +1,16 @@
+box: ruby:2.3
+build:
+  steps:
+    - script:
+        name: install vagrant
+        code: |
+          wget https://releases.hashicorp.com/vagrant/2.0.1/vagrant_2.0.1_x86_64.deb
+          dpkg -i vagrant_2.0.1_x86_64.deb
+    - bundle-install
+    - script:
+      name: rspec
+      code: bundle exec rake
+  after_steps:
+    - script:
+      name: shutdown vm
+      code: vagrant destroy -f
