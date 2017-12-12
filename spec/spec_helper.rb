@@ -2,6 +2,8 @@ require 'serverspec'
 require 'net/ssh'
 require 'tempfile'
 
+VAGRANT_BIN_PATH = '/usr/local/bin/vagrant'
+
 set :backend, :ssh
 
 if ENV['ASK_SUDO_PASSWORD']
@@ -18,10 +20,10 @@ end
 host = ENV['TARGET_HOST']
 target = host.split('_')[1]
 
-`vagrant up #{host}`
+`#{VAGRANT_BIN_PATH} up #{host}`
 system("bundle exec itamae ssh -h #{host} --vagrant '#{File.expand_path("../#{target}/role.rb", __FILE__)}' -j '#{File.expand_path("../#{target}/node.json", __FILE__)}'")
 config = Tempfile.new('', Dir.tmpdir)
-`vagrant ssh-config #{host} > #{config.path}`
+`#{VAGRANT_BIN_PATH} ssh-config #{host} > #{config.path}`
 
 options = Net::SSH::Config.for(host, [config.path])
 
